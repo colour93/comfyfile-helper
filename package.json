@@ -1,10 +1,10 @@
 {
-  "name": "electron-react-vite-semi-tailwind-template",
+  "name": "comyfyfile-helper",
   "version": "1.0.0",
-  "description": "An Electron application with React and TypeScript",
+  "description": "A helper for ComfyFile",
   "main": "./out/main/index.js",
-  "author": "example.com",
-  "homepage": "https://electron-vite.org",
+  "author": "colour93",
+  "homepage": "https://github.com/colour93/comyfyfile-helper",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
@@ -25,13 +25,16 @@
     "@douyinfe/semi-ui": "^2.69.0",
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^3.0.0",
-    "electron-updater": "^6.1.7"
+    "@types/lodash": "^4.17.13",
+    "axios": "^1.7.7",
+    "electron-updater": "^6.1.7",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^2.0.0",
     "@electron-toolkit/eslint-config-ts": "^2.0.0",
     "@electron-toolkit/tsconfig": "^1.0.1",
-    "@types/node": "^20.14.8",
+    "@types/node": "^20.17.6",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
