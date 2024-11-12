@@ -1,4 +1,4 @@
-import { Button, Toast, Typography, Row, Space } from '@douyinfe/semi-ui'
+import { Button, Toast, Row, Space, Input, Col } from '@douyinfe/semi-ui'
 import { useState, useEffect } from 'react'
 
 const ModelDownloadSettings: React.FC = () => {
@@ -6,8 +6,8 @@ const ModelDownloadSettings: React.FC = () => {
   const [logging, setLogging] = useState(false)
 
   useEffect(() => {
-    window.electron.ipcRenderer.invoke('event:service-info').then((res) => {
-      setLogged(res.liblib.loginStatus)
+    window.electron.ipcRenderer.invoke('event:config').then((res) => {
+      setLogged(Boolean(res.providers.liblib.token))
     })
   }, [])
 
@@ -25,15 +25,27 @@ const ModelDownloadSettings: React.FC = () => {
 
   return (
     <div>
-      <div>
-        <Typography.Title heading={4}>Liblib</Typography.Title>
-        <Row>
-          <Space>
-            <span>{logged ? '已登录' : '未登录'}</span>
-            <Button loading={logging} onClick={handleLogin}>
-              登录
-            </Button>
-          </Space>
+      <div className="flex flex-col gap-4">
+        <Row gutter={16}>
+          <Col span={4}>
+            <span>Liblib 登录状态</span>
+          </Col>
+          <Col span={20}>
+            <Space>
+              <span>{logged ? '已登录' : '未登录'}</span>
+              <Button loading={logging} onClick={handleLogin}>
+                登录
+              </Button>
+            </Space>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={4}>
+            <span>Civitai API Key</span>
+          </Col>
+          <Col span={20}>
+            <Input />
+          </Col>
         </Row>
       </div>
     </div>

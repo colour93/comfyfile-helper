@@ -11,13 +11,17 @@ const defaultConfig: Config = {
     },
     civitai: {
       token: null
-    },
-    huggingface: {
-      mirror: null
     }
   },
   download: {
-    proxy: null,
+    hfMirror: {
+      url: null,
+      enable: false
+    },
+    proxy: {
+      url: null,
+      enable: false
+    },
     method: 'wget'
   }
 }

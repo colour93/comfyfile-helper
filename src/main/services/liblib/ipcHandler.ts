@@ -5,7 +5,6 @@ export default function setupLiblibIpcHandler(): void {
   setupLiblibAuthIpcHandler()
 
   ipcMain.handle('event:liblib-get-model-data', async (_event, rawUrl: string) => {
-    console.log('event:liblib-get-model-data', rawUrl)
     try {
       return {
         code: 0,

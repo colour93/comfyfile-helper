@@ -6,12 +6,16 @@ export type Config = {
     civitai?: {
       token: string | null
     }
-    huggingface?: {
-      mirror: string | null
-    }
   }
   download: {
-    proxy: string | null
+    hfMirror: {
+      url: string | null
+      enable: boolean | null
+    }
+    proxy: {
+      url: string | null
+      enable: boolean | null
+    }
     method: 'wget' | 'curl'
   }
 }

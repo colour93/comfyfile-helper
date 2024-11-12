@@ -1,9 +1,17 @@
+import { DownloadConfig } from '@renderer/typings/DownloadConfig'
 import { Model, ModelBase, ModelSource, ModelType } from '@renderer/typings/Model'
 
 export const interModelData = async (rawUrl: string): Promise<Model> => {
   const source = inferModelSource(rawUrl)
 
   if (source == 'civitai') {
+    const modelData = await getModelDataFromCivitai(rawUrl)
+    if (!modelData) {
+      return {
+        source
+      }
+    }
+    return modelData
   } else if (source == 'liblib') {
     const modelData = await getModelDataFromLiblib(rawUrl)
     if (!modelData) {
@@ -16,11 +24,7 @@ export const interModelData = async (rawUrl: string): Promise<Model> => {
     const filename = inferModelFilenameFromUrl(rawUrl)
     const type = inferModelType(rawUrl)
     const base = inferModelBase(rawUrl)
-    console.log('source', source)
-    console.log('filename', filename)
-    console.log('type', type)
-    console.log('base', base)
-    return { source, type, base, rawUrl, filename }
+    return { source, type, base, rawUrl, filename, directUrl: rawUrl }
   }
 }
 
@@ -84,4 +88,57 @@ export const inferModelFilenameFromUrl = (rawUrl: string): string | undefined =>
 export const getModelDataFromLiblib = async (rawUrl: string): Promise<Model | undefined> => {
   if (!rawUrl) return
   return (await window.electron.ipcRenderer.invoke('event:liblib-get-model-data', rawUrl)).data
+}
+
+export const getModelDataFromCivitai = async (rawUrl: string): Promise<Model | undefined> => {
+  if (!rawUrl) return
+  return (await window.electron.ipcRenderer.invoke('event:civitai-get-model-data', rawUrl)).data
+}
+
+export const getModelDownloadShell = (
+  model: Model,
+  downloadConfig: DownloadConfig
+): string | undefined => {
+  console.log(model, downloadConfig)
+  if (
+    !model.type ||
+    !model.base ||
+    !model.filename ||
+    !model.source ||
+    !downloadConfig['direct-url']
+  )
+    return
+  let url = downloadConfig['direct-url']
+  if (
+    model.source == 'huggingface' &&
+    downloadConfig['hf-mirror-enable'] &&
+    downloadConfig['hf-mirror-url']
+  ) {
+    url = downloadConfig['direct-url'].replace(
+      'https://huggingface.co',
+      downloadConfig['hf-mirror-url']
+    )
+  }
+
+  const saveDir = `${model.type}${model.base === 'others' ? '' : '/' + model.base}`
+
+  const mkdirSh = `mkdir -p "${saveDir}"`
+
+  let downloadSh = ''
+
+  if (downloadConfig['download-method'] === 'curl') {
+    downloadSh += `curl`
+    if (downloadConfig['proxy-enable'] && downloadConfig['proxy-url']) {
+      downloadSh += ` -e "https_proxy=${downloadConfig['proxy-url']}"`
+    }
+    downloadSh += ` -o "${saveDir}/${model.filename}" "${url}"`
+  } else {
+    downloadSh += `wget -c`
+    if (downloadConfig['proxy-enable'] && downloadConfig['proxy-url']) {
+      downloadSh += ` -x "${downloadConfig['proxy-url']}"`
+    }
+    downloadSh += ` -O "${saveDir}/${model.filename}" "${url}"`
+  }
+
+  return `${mkdirSh} && ${downloadSh}`
 }

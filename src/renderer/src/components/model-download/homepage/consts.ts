@@ -1,3 +1,14 @@
+export const DOWNLOAD_METHOD_OPTIONS = [
+  {
+    value: 'wget',
+    label: 'wget'
+  },
+  {
+    value: 'curl',
+    label: 'curl'
+  }
+]
+
 export const MODEL_SOURCE_OPTIONS = [
   {
     value: 'huggingface',
