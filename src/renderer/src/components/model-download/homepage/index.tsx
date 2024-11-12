@@ -1,14 +1,22 @@
 import { Col, Form, Row, Toast, Typography } from '@douyinfe/semi-ui'
 import { MODEL_BASE_OPTIONS, MODEL_SOURCE_OPTIONS, MODEL_TYPE_OPTIONS } from './consts'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { Model } from '@renderer/typings/Model'
+import { interModelData } from '@renderer/utils/model'
 
 const ModelDownloadHomepage: React.FC = () => {
   const { Input, Select } = Form
 
+  const [model, setModel] = useState<Model>({})
+
   const formRef = useRef<Form>(null)
 
-  const autoInfer = (): void => {
-    const formUrl = formRef.current?.formApi.getValue('url')
+  useEffect(() => {
+    formRef.current?.formApi.setValues(model)
+  }, [model])
+
+  const autoInfer = async (): Promise<void> => {
+    const formUrl = formRef.current?.formApi.getValue('rawUrl')
     if (!formUrl) {
       Toast.error('请输入模型地址')
       return
@@ -19,11 +27,20 @@ const ModelDownloadHomepage: React.FC = () => {
       id: toastId,
       duration: 0
     })
-    Toast.success({
-      content: '检测完成',
-      id: toastId,
-      duration: 3
-    })
+    try {
+      const newData = await interModelData(formUrl)
+      setModel({
+        ...model,
+        ...newData
+      })
+      Toast.success({
+        content: '检测完成',
+        id: toastId,
+        duration: 3
+      })
+    } catch (error) {
+      Toast.error({ content: (error as Error).message, id: toastId, duration: 3 })
+    }
   }
 
   return (
@@ -32,7 +49,7 @@ const ModelDownloadHomepage: React.FC = () => {
         <Row gutter={16} align="bottom">
           <Col span={16}>
             <Input
-              field="url"
+              field="rawUrl"
               label="模型地址"
               extraText={
                 <Typography.Text link onClick={autoInfer}>

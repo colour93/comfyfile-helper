@@ -1,9 +1,9 @@
 import { ipcMain } from 'electron'
 import LiblibService from './liblib'
-import setupLiblibAuthIpcHandler from './liblib/auth/ipcHandler'
+import setupLiblibIpcHandler from './liblib/ipcHandler'
 
 export default function setupServiceIpcHandler(): void {
-  setupLiblibAuthIpcHandler()
+  setupLiblibIpcHandler()
 
   ipcMain.handle('event:service-info', async () => {
     return {
