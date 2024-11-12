@@ -1,3 +1,3 @@
-import { session } from 'electron'
-
-export default function setupSession(): void {}
+export default function setupSession(): void {
+  console.log('Session has been set up.')
+}
