@@ -4,8 +4,11 @@ import createMainWindow from './mainWindow'
 import setupIpcHandlers from './ipcHandlers'
 import setupSession from './session'
 import ConfigManager from './utils/config'
+import LiblibService from './services/liblib'
 
-ConfigManager.initConfig()
+ConfigManager.initConfig().then(() => {
+  LiblibService.init()
+})
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
