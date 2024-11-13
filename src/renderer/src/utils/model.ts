@@ -129,13 +129,13 @@ export const getModelDownloadShell = (
   if (downloadConfig['download-method'] === 'curl') {
     downloadSh += `curl`
     if (downloadConfig['proxy-enable'] && downloadConfig['proxy-url']) {
-      downloadSh += ` -e "https_proxy=${downloadConfig['proxy-url']}"`
+      downloadSh += ` -x "${downloadConfig['proxy-url']}"`
     }
     downloadSh += ` -o "${saveDir}/${model.filename}" "${url}"`
   } else {
     downloadSh += `wget -c`
     if (downloadConfig['proxy-enable'] && downloadConfig['proxy-url']) {
-      downloadSh += ` -x "${downloadConfig['proxy-url']}"`
+      downloadSh += ` -e "https_proxy=${downloadConfig['proxy-url']}" --no-check-certificate`
     }
     downloadSh += ` -O "${saveDir}/${model.filename}" "${url}"`
   }
