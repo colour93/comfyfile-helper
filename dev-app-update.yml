@@ -1,3 +1,4 @@
 provider: generic
 url: https://example.com/auto-updates
-updaterCacheDirName: electron-react-vite-semi-tailwind-template-updater
+updaterCacheDirName: comfyfile-helper-updater
+

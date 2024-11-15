@@ -1,5 +1,5 @@
-appId: com.electron.app
-productName: electron-react-vite-semi-tailwind-template
+appId: icu.fur93.comfyfile-helper
+productName: ComfyFile Helper
 directories:
   buildResources: build
 files:
@@ -12,7 +12,7 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: electron-react-vite-semi-tailwind-template
+  executableName: ComfyFile Helper
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
